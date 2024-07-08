@@ -1,0 +1,18 @@
+name: publish-the-app-as-container-images
+
+on:
+  push:
+    paths:
+      - ".github/workflows/**"
+      - "compose.yaml"
+      - "code-stubs/go-app/**"
+      - "Dockerfile.d/go-app.development/**"
+  workflow_dispatch:
+
+jobs:
+  test-containers:
+    name: test-containers
+    secrets: inherit
+    uses: ./.github/workflows/_test-the-app-using-container.yaml
+    with:
+      compose-service-name: go-app.development

@@ -1,0 +1,21 @@
+services:
+  go-app.development:
+    build:
+      args:
+        GID: ${GID:-0}
+        UID: ${UID:-0}
+      context: Dockerfile.d/go-app.development
+    command:
+      - zsh
+      - --login
+      - -c
+      - |
+        go test
+        sleep infinity
+    environment:
+      - ENV_UNIQUE_ID
+    init: true
+    user: "${UID:-0}:${GID:-0}"
+    volumes:
+      - ./workspace:/workspace
+    working_dir: /workspace/http-ok-whatever
