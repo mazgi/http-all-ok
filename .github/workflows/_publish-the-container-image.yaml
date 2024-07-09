@@ -69,7 +69,9 @@ jobs:
         id: build
         uses: docker/build-push-action@v6
         with:
-          build-args: GIT_VERSION_TAG=${{ env.TAG_SUFFIX }},GIT_SHORT_SHA=${{ env.GIT_SHORT_SHA }}
+          build-args: |
+            GIT_VERSION_TAG=${{ env.TAG_SUFFIX }}
+            GIT_SHORT_SHA=${{ env.GIT_SHORT_SHA }}
           build-contexts: workspace=workspace
           context: Dockerfile.d/${{ inputs.src-container-image-name }}/
           labels: ${{ steps.meta.outputs.labels }}
