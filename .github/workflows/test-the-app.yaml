@@ -1,12 +1,12 @@
-name: publish-the-app-as-container-images
+name: test-the-app
 
 on:
   push:
     paths:
       - ".github/workflows/**"
       - "compose.yaml"
-      - "code-stubs/go-app/**"
-      - "Dockerfile.d/go-app.development/**"
+      - "Dockerfile.d/go-app.production/**"
+      - "workspace/**"
   workflow_dispatch:
 
 jobs:

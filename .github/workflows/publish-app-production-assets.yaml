@@ -1,0 +1,37 @@
+name: publish-app-production-assets
+
+env:
+  SRC_CONTAINER_IMAGE_NAME: go-app.production
+  PUBLISH_APP_NAME: http-ok-whatever
+
+on:
+  push:
+    paths:
+      - ".github/workflows/**"
+      - "compose.yaml"
+      - "Dockerfile.d/go-app.production/**"
+      - "workspace/**"
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  set-environment-variable-as-vars:
+    runs-on: ubuntu-latest
+    outputs:
+      src-container-image-name: ${{ steps.set-outputs.outputs.src-container-image-name }}
+      publish-container-image-name: ${{ steps.set-outputs.outputs.publish-container-image-name }}
+    steps:
+      - id: set-outputs
+        run: |
+          echo 'src-container-image-name=${{ env.SRC_CONTAINER_IMAGE_NAME }}' >> $GITHUB_OUTPUT
+          echo 'publish-container-image-name=${{ env.PUBLISH_APP_NAME }}' >> $GITHUB_OUTPUT
+  publish-containers:
+    name: publish-containers - ${{ needs.set-environment-variable-as-vars.outputs.publish-container-image-name }}
+    needs:
+      - set-environment-variable-as-vars
+    secrets: inherit
+    uses: ./.github/workflows/_publish-the-container-image.yaml
+    with:
+      src-container-image-name: "${{ needs.set-environment-variable-as-vars.outputs.src-container-image-name }}"
+      publish-container-image-name: "${{ needs.set-environment-variable-as-vars.outputs.publish-container-image-name }}"
