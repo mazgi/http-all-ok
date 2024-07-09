@@ -1,4 +1,0 @@
-autoload -U bashcompinit; bashcompinit
-autoload -Uz compinit; compinit
-eval "$(goenv init -)"
-eval "$(starship init zsh)"
