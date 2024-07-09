@@ -10,8 +10,7 @@ services:
       - --login
       - -c
       - |
-        go test
-        sleep infinity
+        go-inotifywait.zsh
     environment:
       - ENV_UNIQUE_ID
     init: true
@@ -19,3 +18,15 @@ services:
     volumes:
       - ./workspace:/workspace
     working_dir: /workspace/http-ok-whatever
+  go-app.production:
+    build:
+      additional_contexts:
+        - workspace=workspace
+      args:
+        GIT_SHORT_SHA:
+        GID: ${GID:-0}
+        UID: ${UID:-0}
+      context: Dockerfile.d/go-app.production
+    init: true
+    profiles:
+      - only-production
